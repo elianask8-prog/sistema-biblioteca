@@ -1,11 +1,13 @@
 # CADASTRAR LIVROS
-def cadrastrarLivro():
+def cadrastrarLivro():  # cadastra os livros
 
     titulo = input("Informe o titulo:")
     autor = input("Informe o autor:")
     ano = input("Informe o anos:")
     codigo = proximoCodigo()  # LIGA AUTOMATICAMENTE AS DUAS FUNÇOES
-    with open("livros.txt", "a", encoding="utf-8") as arquivo:
+    with open(
+        "livros.txt", "a", encoding="utf-8"
+    ) as arquivo:  # quarda a inf. no arquivo ta a informaçao
         arquivo.write(f"{codigo};{titulo};{autor};{ano}\n")
 
 
@@ -40,14 +42,14 @@ def cadastroUsuario():
 
 
 # PROXIMO CADASTRO DEPOIS DO ULTIMO
-def proximoCodigoUsuario():    
-        usuarios = lerUsuarios()
-        codigo = []
-        for usuario in usuarios:
-            coluna = usuario.strip().split(";")
-            codigo.append(int(coluna[0]))
-        ultimo = max(codigo)
-        return ultimo + 1
+def proximoCodigoUsuario():
+    usuarios = lerUsuarios()
+    codigo = []
+    for usuario in usuarios:
+        coluna = usuario.strip().split(";")
+        codigo.append(int(coluna[0]))
+    ultimo = max(codigo)
+    return ultimo + 1
 
 
 # LISTAR LIVROS
@@ -163,12 +165,9 @@ def registrarEmprestimo():
     data_devolucao = ""
     status = "ativo"
 
-
-    if not livroExiste (codigo_livro):
+    if not livroExiste(codigo_livro):
         print("Livro não encontado.")
         return
-
-    
 
     if not usuarioExiste(id_usuario):
         print("Usuario não encontrado")
@@ -183,7 +182,7 @@ def registrarEmprestimo():
         print("Emprestimo registrado com sucesso")
 
 
-# registrarEmprestimo()
+#registrarEmprestimo()
 
 # FUNCAO AUXILIAR SUGERIDA, PARA VER SE EXISTE O LIVRO
 
@@ -219,21 +218,87 @@ def livroEstaEmprestado(codigo):
     return False
 
 
+# REGISTRAR DEVOLUÇÃO
 
-
-#REGISTRAR DEVOLUÇÃO
 
 def registrarDevolucao():
-    codigo=int(input("Informe o código do livro:"))
+    codigo = int(input("Informe o código do livro:"))  # solicita o codigo
 
-    livros=verificarEmprestimos()
-    resto=[]
-    for livro in livros:
-        coluna=livro.strip().split(";")
-        
-        if int(coluna[0]) != codigo:
+    livros = verificarEmprestimos()
+    resto = []  # guarda todo os emprestimos q deve ficar
+    encontrou=False  # informa se foi encontado ou não
+
+
+    for livro in livros: #percorre 
+        coluna = livro.strip().split(";")  #quebra e tira os espaços
+
+        if int(coluna[0]) == codigo: #condição 
+
+            encontrou = True 
+        else:
             resto.append(livro)
-    with open('emprestimos.txt', 'w', encoding='utf-8') as arquivo:
-        for livro in resto:
-            arquivo.write(livro)
-            
+
+    if encontrou:
+
+        with open("emprestimos.txt", "w", encoding="utf-8") as arquivo:
+            for livro in resto:
+                arquivo.write(livro)
+
+    
+        print("Devolução efetuada com sucesso")
+    else:
+        print("Código não existente")
+
+
+#registrarDevolucao()
+
+#GERAR RELATORIO
+
+def relatorioLivros():
+
+    livrosCadastrado= lerLivros()
+    
+
+    cont=0
+
+    for livroCadastrado in livrosCadastrado:
+        
+        cont+= 1
+
+    #print("A quantidade livros cadastrasdos é : ", cont)
+    return cont
+
+#relatorioLivros()
+
+
+def relatorioUsuarios():
+
+    usuariosCadastrado=lerUsuarios()
+
+    cont=0
+
+    for usuarioCadastrado in usuariosCadastrado:
+        
+        cont+=1
+    #print("A quantidade usuarios cadastrasdos é : ", cont)
+    return cont
+
+#relatorioUsuarios()
+
+
+
+def relatorioEmprestimo():
+
+    
+    livrosEmprestado=verificarEmprestimos() # Quantidade de livros emprestados
+
+
+
+        
+        
+
+
+
+
+
+
