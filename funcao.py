@@ -5,8 +5,10 @@ def cadastrarLivro():  # cadastra os livros
     titulo = input("Informe o titulo:")
     autor = input("Informe o autor:")
     ano = input("Informe o anos:")
-    
-    with open("livros.txt", "a", encoding="utf-8") as arquivo:  # quarda a inf. no arquivo ta a informaçao
+
+    with open(
+        "livros.txt", "a", encoding="utf-8"
+    ) as arquivo:  # quarda a inf. no arquivo ta a informaçao
         arquivo.write(f"{codigo};{titulo};{autor};{ano}\n")
 
     print("livro cadrastado!")
@@ -36,7 +38,7 @@ def cadastroUsuario():
     codigo = proximoCodigoUsuario()  # LIGA AUTOMATICAMENTE AS DUAS FUNÇOES
     nome = input("Informe o nome:")
     email = input("Informe o email:")
-    
+
     with open("usuarios.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(f"{codigo};{nome};{email}\n")
 
@@ -146,14 +148,13 @@ def consultaEmprestimos(id: int):
     emprestimos = verificarEmprestimos()
     for emprestimo in emprestimos:
         coluna = emprestimo.strip().split(";")
-        if (int(coluna[0]) == id) and  coluna[4] == "ativo":  # coluna[0] codigo do livro,  id percorre pra ver se se há algum emprestado  # status
-             
-                print("Livro emprestado")
-                return True
+        if (int(coluna[0]) == id) and coluna[
+            4
+        ] == "ativo":  # coluna[0] codigo do livro,  id percorre pra ver se se há algum emprestado  # status
+
+            print("Livro emprestado")
+            return True
     return False
-
-
-
 
 
 # GRAVAR EMPRESTIMOS
@@ -223,7 +224,7 @@ def livroEstaEmprestado(codigo):
 
 
 def registrarDevolucao():
-    import  datetime
+    import datetime
 
     codigo = int(input("Informe o código do livro:"))  # solicita o codigo
 
@@ -289,27 +290,82 @@ def relatorioUsuarios():
 # relatorioUsuarios()
 
 
-"""def relatorioEmprestimo():
+def relatorioEmprestimo():
 
-    livrosEmprestado = verificarEmprestimos()  # Quantidade de livros emprestados
-"""
+    livrosEmprestado = verificarEmprestimos()
 
-#MENU PRINCIPAL
+    # Quantidade de livros emprestados
+
+    cont1 = 0  # contador quantidade total
+
+    cont = 0  # quantidade disponivel
+
+    for livroEmprestado in livrosEmprestado:  # percorre
+
+        coluna = livrosEmprestado.strip().split(";")  # quebra e tira os espaços
+        if coluna[4] == "ativo":  # livros ativos  # acha o livros ativos e conta
+            cont += 1
+
+        cont1 += 1
+
+    return cont, cont1
+
+
+def listaLivrosEmprestados():# LISTA DE LIVROS  EMPRESTADOS
+
+    emprestimos = verificarEmprestimos()
+    L = []
+
+    for emprestimo in emprestimos:
+        coluna = emprestimo.strip().split(";")
+
+        if coluna[4] == "ativo":
+            L.append(emprestimo)
+    return L
+
+
+def listaDosUsuarios():# LISTA DE USUARIOS POR ID
+
+    emprestimos = listaLivrosEmprestados()
+    L = []
+
+    for emprestimo in emprestimos:
+
+        coluna = emprestimo.strip().split(";")
+        id = int(coluna[1])
+
+        usuario = buscaUsuarioPorId(id)
+
+        if usuario:
+            L.append(usuario)
+
+    return L
+
+
+
+
+#precisa ARRUMA O RESTANTE E JUNTA TODOS EM UM RELATORIO FINAL
+
+
+
+# MENU PRINCIPAL
+
 
 def menuPrincipal():
     import os
 
-    menu = {
-    "1": cadastrarLivro,
-    "2": listarLivros,
-    "3": cadastroUsuario,
-    "4": listarUsuarios,
-    "5": registrarEmprestimo,
-    "6": registrarDevolucao
-}
-    os.system('cls')
+    menu = {  # lista de funçoes
+        "1": cadastrarLivro,
+        "2": listarLivros,
+        "3": cadastroUsuario,
+        "4": listarUsuarios,
+        "5": registrarEmprestimo,
+        "6": registrarDevolucao,
+    }
+    os.system("cls")  # limpa a tela anterior
+
     while True:
-        print("\n=== SISTEMA DE BIBLIOTECA ===")
+        print("SISTEMA DE BIBLIOTECA")  # opçoes pro usuario acessar
         print("1 - Cadastrar livro")
         print("2 - Listar livros")
         print("3 - Cadastrar usuário")
@@ -318,15 +374,16 @@ def menuPrincipal():
         print("6 - Devolver livro")
         print("0 - Sair")
 
-        escolha = input("Escolha uma opção: ")
+        escolha = input("Escolha uma opção: ")  # escolha do usuario
 
-        if escolha == "0":
+        if escolha == "0":  # se a opçao não existir parar o programa
             break
 
-        if escolha in menu:
+        if escolha in menu:  # chama a funçao conforme a escolha do usuario o ()
             menu[escolha]()
             input()
         else:
             print("Opção inválida")
+
 
 menuPrincipal()
