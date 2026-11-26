@@ -1,3 +1,6 @@
 1;Dom Casmurro;Machado de Assis;1899
 2;O Cortiço;Aluísio Azevedo;1890
 3;Grande Sertão: Veredas;João Guimarães Rosa;1956
+4;;;
+5;ceu azul;eliana rossi;2026
+6;bla;eliana;2024

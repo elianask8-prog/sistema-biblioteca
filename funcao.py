@@ -1,17 +1,15 @@
 # CADASTRAR LIVROS
-def cadrastrarLivro():  # cadastra os livros
+def cadastrarLivro():  # cadastra os livros
 
+    codigo = proximoCodigo()  # LIGA AUTOMATICAMENTE AS DUAS FUNÇOES
     titulo = input("Informe o titulo:")
     autor = input("Informe o autor:")
     ano = input("Informe o anos:")
-    codigo = proximoCodigo()  # LIGA AUTOMATICAMENTE AS DUAS FUNÇOES
-    with open(
-        "livros.txt", "a", encoding="utf-8"
-    ) as arquivo:  # quarda a inf. no arquivo ta a informaçao
+    
+    with open("livros.txt", "a", encoding="utf-8") as arquivo:  # quarda a inf. no arquivo ta a informaçao
         arquivo.write(f"{codigo};{titulo};{autor};{ano}\n")
 
-
-# print("livro cadrastado!")
+    print("livro cadrastado!")
 
 
 # PARA ARMAZENAR O CODIGO NO PROXIMO DEPOIS DO ULTIMO
@@ -34,9 +32,11 @@ def proximoCodigo():
 
 
 def cadastroUsuario():
+
+    codigo = proximoCodigoUsuario()  # LIGA AUTOMATICAMENTE AS DUAS FUNÇOES
     nome = input("Informe o nome:")
     email = input("Informe o email:")
-    codigo = proximoCodigoUsuario()  # LIGA AUTOMATICAMENTE AS DUAS FUNÇOES
+    
     with open("usuarios.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(f"{codigo};{nome};{email}\n")
 
@@ -146,13 +146,14 @@ def consultaEmprestimos(id: int):
     emprestimos = verificarEmprestimos()
     for emprestimo in emprestimos:
         coluna = emprestimo.strip().split(";")
-        if (
-            int(coluna[0]) == id
-        ):  # coluna[0] codigo do livro,  id percorre pra ver se se há algum emprestado
-            if coluna[4] == "ativo":  # status
+        if (int(coluna[0]) == id) and  coluna[4] == "ativo":  # coluna[0] codigo do livro,  id percorre pra ver se se há algum emprestado  # status
+             
                 print("Livro emprestado")
                 return True
     return False
+
+
+
 
 
 # GRAVAR EMPRESTIMOS
@@ -182,7 +183,7 @@ def registrarEmprestimo():
         print("Emprestimo registrado com sucesso")
 
 
-#registrarEmprestimo()
+# registrarEmprestimo()
 
 # FUNCAO AUXILIAR SUGERIDA, PARA VER SE EXISTE O LIVRO
 
@@ -222,19 +223,20 @@ def livroEstaEmprestado(codigo):
 
 
 def registrarDevolucao():
+    import  datetime
+
     codigo = int(input("Informe o código do livro:"))  # solicita o codigo
 
     livros = verificarEmprestimos()
     resto = []  # guarda todo os emprestimos q deve ficar
-    encontrou=False  # informa se foi encontado ou não
+    encontrou = False  # informa se foi encontado ou não
 
+    for livro in livros:  # percorre
+        coluna = livro.strip().split(";")  # quebra e tira os espaços
 
-    for livro in livros: #percorre 
-        coluna = livro.strip().split(";")  #quebra e tira os espaços
+        if int(coluna[0]) == codigo:  # condição
 
-        if int(coluna[0]) == codigo: #condição 
-
-            encontrou = True 
+            encontrou = True
         else:
             resto.append(livro)
 
@@ -244,61 +246,87 @@ def registrarDevolucao():
             for livro in resto:
                 arquivo.write(livro)
 
-    
         print("Devolução efetuada com sucesso")
     else:
         print("Código não existente")
 
 
-#registrarDevolucao()
+# registrarDevolucao()
 
-#GERAR RELATORIO
+# GERAR RELATORIO
+
 
 def relatorioLivros():
 
-    livrosCadastrado= lerLivros()
-    
+    livrosCadastrado = lerLivros()
 
-    cont=0
+    cont = 0
 
     for livroCadastrado in livrosCadastrado:
-        
-        cont+= 1
 
-    #print("A quantidade livros cadastrasdos é : ", cont)
+        cont += 1
+
+    # print("A quantidade livros cadastrasdos é : ", cont)
     return cont
 
-#relatorioLivros()
+
+# relatorioLivros()
 
 
 def relatorioUsuarios():
 
-    usuariosCadastrado=lerUsuarios()
+    usuariosCadastrado = lerUsuarios()
 
-    cont=0
+    cont = 0
 
     for usuarioCadastrado in usuariosCadastrado:
-        
-        cont+=1
-    #print("A quantidade usuarios cadastrasdos é : ", cont)
+
+        cont += 1
+    # print("A quantidade usuarios cadastrasdos é : ", cont)
     return cont
 
-#relatorioUsuarios()
+
+# relatorioUsuarios()
 
 
+"""def relatorioEmprestimo():
 
-def relatorioEmprestimo():
+    livrosEmprestado = verificarEmprestimos()  # Quantidade de livros emprestados
+"""
 
-    
-    livrosEmprestado=verificarEmprestimos() # Quantidade de livros emprestados
+#MENU PRINCIPAL
 
+def menuPrincipal():
+    import os
 
+    menu = {
+    "1": cadastrarLivro,
+    "2": listarLivros,
+    "3": cadastroUsuario,
+    "4": listarUsuarios,
+    "5": registrarEmprestimo,
+    "6": registrarDevolucao
+}
+    os.system('cls')
+    while True:
+        print("\n=== SISTEMA DE BIBLIOTECA ===")
+        print("1 - Cadastrar livro")
+        print("2 - Listar livros")
+        print("3 - Cadastrar usuário")
+        print("4 - Listar usuários")
+        print("5 - Registrar empréstimo")
+        print("6 - Devolver livro")
+        print("0 - Sair")
 
-        
-        
+        escolha = input("Escolha uma opção: ")
 
+        if escolha == "0":
+            break
 
+        if escolha in menu:
+            menu[escolha]()
+            input()
+        else:
+            print("Opção inválida")
 
-
-
-
+menuPrincipal()
