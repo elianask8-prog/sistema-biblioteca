@@ -346,6 +346,15 @@ def listaDosUsuarios():# LISTA DE USUARIOS POR ID
 
 #precisa ARRUMA O RESTANTE E JUNTA TODOS EM UM RELATORIO FINAL
 
+def gerarRelatorio():
+    relatorioLivros()
+    relatorioUsuarios()
+    relatorioEmprestimo()
+    listaLivrosEmprestados()
+    listaDosUsuarios()
+    return
+
+gerarRelatorio()
 
 
 # MENU PRINCIPAL
